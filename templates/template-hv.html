@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    @page {
+      size: letter;
+      margin: 0.5in;
+    }
+    body {
+      font-family: "Georgia", "Times New Roman", serif;
+      font-size: 10pt;
+      line-height: 1.35;
+      color: #111;
+      margin: 0;
+    }
+    h1 {
+      font-size: 16pt;
+      text-align: center;
+      text-transform: uppercase;
+      margin: 0 0 3px 0;
+      letter-spacing: 0.5px;
+    }
+    .contact-info {
+      text-align: center;
+      font-size: 9pt;
+      margin-bottom: 14px;
+    }
+    .contact-info a {
+      color: #111;
+      text-decoration: none;
+    }
+    h2 {
+      font-size: 10.5pt;
+      text-transform: uppercase;
+      border-bottom: 1px solid #222;
+      padding-bottom: 2px;
+      margin: 12px 0 6px 0;
+      letter-spacing: 0.5px;
+    }
+    .row {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 2px;
+    }
+    .bold { font-weight: bold; }
+    .italic { font-style: italic; }
+    ul {
+      margin: 3px 0 6px 18px;
+      padding: 0;
+    }
+    li {
+      margin-bottom: 2px;
+      text-align: justify;
+    }
+  </style>
+</head>
+<body>
+  <h1>{{perfil.nombre}}</h1>
+  <div class="contact-info">
+    {{perfil.ubicacion}} • {{perfil.telefono}} • {{perfil.email}} • 
+    <a href="{{perfil.linkedin}}">LinkedIn</a> • <a href="{{perfil.github}}">GitHub</a>
+  </div>
+
+  <h2>Educación</h2>
+  {{#each educacion}}
+  <div class="row">
+    <span class="bold">{{this.institucion}}</span>
+    <span>{{this.ubicacion}}</span>
+  </div>
+  <div class="row">
+    <span class="italic">{{this.grado}}</span>
+    <span class="italic">{{this.periodo}}</span>
+  </div>
+  {{/each}}
+
+  <h2>Experiencia Laboral</h2>
+  {{#each experiencia}}
+  <div class="row">
+    <span class="bold">{{this.empresa}}</span>
+    <span>{{this.ubicacion}}</span>
+  </div>
+  <div class="row">
+    <span class="italic">{{this.cargo}}</span>
+    <span class="italic">{{this.periodo}}</span>
+  </div>
+  <ul>
+    {{#each this.logros}}
+    <li>{{this}}</li>
+    {{/each}}
+  </ul>
+  {{/each}}
+
+  <h2>Habilidades Técnicas</h2>
+  <ul>
+    {{#each habilidades}}
+    <li><span class="bold">{{this.categoria}}:</span> {{this.items}}</li>
+    {{/each}}
+  </ul>
+</body>
+</html>
