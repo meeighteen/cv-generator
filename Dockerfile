@@ -1,22 +1,35 @@
-# Etapa 1: Build
+# Etapa 1: Builder
 FROM node:20-alpine AS builder
 WORKDIR /app
 
-COPY package*.json ./
-RUN npm ci
+# Habilitar pnpm vía corepack
+RUN corepack enable && corepack prepare pnpm@latest --activate
 
+# Copiar archivos de dependencias
+COPY package.json pnpm-lock.yaml* ./
+
+# Instalar todas las dependencias (incluyendo devDependencies para compilar)
+RUN pnpm install --frozen-lockfile
+
+# Copiar el código fuente y compilar
 COPY . .
-RUN npm run build --if-present
+RUN pnpm run build --if-present
 
-# Etapa 2: Runtime limpio
+# Etapa 2: Runner (Producción limpia)
 FROM node:20-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
 
-COPY package*.json ./
-RUN npm ci --omit=dev
+# Habilitar pnpm también en el runner para instalar dependencias de producción
+RUN corepack enable && corepack prepare pnpm@latest --activate
 
+COPY package.json pnpm-lock.yaml* ./
+
+# Instalar únicamente dependencias de producción
+RUN pnpm install --prod --frozen-lockfile
+
+# Copiar archivos compilados desde la etapa builder
 COPY --from=builder /app/dist ./dist
 
 USER node
